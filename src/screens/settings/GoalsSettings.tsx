@@ -13,6 +13,8 @@ export default function GoalsSettings() {
   const addGoal = useStore((s) => s.addGoal)
   const contributeToGoal = useStore((s) => s.contributeToGoal)
   const deleteGoal = useStore((s) => s.deleteGoal)
+  const askConfirm = useStore((s) => s.askConfirm)
+  const askPrompt = useStore((s) => s.askPrompt)
 
   const [showAdd, setShowAdd] = useState(false)
   const [name, setName] = useState('')
@@ -74,7 +76,12 @@ export default function GoalsSettings() {
               <Card key={g.id}>
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-ink text-sm font-medium">{g.name}</p>
-                  <button onClick={() => confirm('¿Borrar esta meta?') && deleteGoal(g.id)} className="text-expense text-xs">
+                  <button
+                    onClick={async () => {
+                      if (await askConfirm('¿Borrar esta meta?')) deleteGoal(g.id)
+                    }}
+                    className="text-expense text-xs"
+                  >
                     Borrar
                   </button>
                 </div>
@@ -101,8 +108,8 @@ export default function GoalsSettings() {
                     +20€
                   </button>
                   <button
-                    onClick={() => {
-                      const v = prompt('¿Cuánto quieres añadir a esta meta?')
+                    onClick={async () => {
+                      const v = await askPrompt('¿Cuánto quieres añadir a esta meta?')
                       const n = v ? parseFloat(v.replace(',', '.')) : NaN
                       if (!isNaN(n) && n !== 0) contributeToGoal(g.id, n)
                     }}

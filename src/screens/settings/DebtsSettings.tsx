@@ -12,6 +12,7 @@ export default function DebtsSettings() {
   const settleDebt = useStore((s) => s.settleDebt)
   const deleteDebt = useStore((s) => s.deleteDebt)
   const netDebts = useStore((s) => s.netDebts())
+  const askConfirm = useStore((s) => s.askConfirm)
 
   const [showAdd, setShowAdd] = useState(false)
   const [person, setPerson] = useState('')
@@ -107,7 +108,12 @@ export default function DebtsSettings() {
               <button onClick={() => settleDebt(d.id)} className="text-gold text-xs">
                 Saldar
               </button>
-              <button onClick={() => confirm('¿Borrar esta deuda?') && deleteDebt(d.id)} className="text-expense text-xs">
+              <button
+                onClick={async () => {
+                  if (await askConfirm('¿Borrar esta deuda?')) deleteDebt(d.id)
+                }}
+                className="text-expense text-xs"
+              >
                 ✕
               </button>
             </Card>

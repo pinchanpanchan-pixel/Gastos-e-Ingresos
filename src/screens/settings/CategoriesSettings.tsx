@@ -15,6 +15,7 @@ export default function CategoriesSettings() {
   const updateCategory = useStore((s) => s.updateCategory)
   const deleteCategory = useStore((s) => s.deleteCategory)
   const updateSettings = useStore((s) => s.updateSettings)
+  const askConfirm = useStore((s) => s.askConfirm)
 
   const [editing, setEditing] = useState<Category | 'new' | null>(null)
 
@@ -82,8 +83,8 @@ export default function CategoriesSettings() {
               Editar
             </button>
             <button
-              onClick={() => {
-                if (confirm(`¿Borrar la categoría "${c.name}"?`)) deleteCategory(c.id)
+              onClick={async () => {
+                if (await askConfirm(`¿Borrar la categoría "${c.name}"?`)) deleteCategory(c.id)
               }}
               className="text-expense text-xs px-1"
             >

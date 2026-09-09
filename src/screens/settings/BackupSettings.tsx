@@ -13,6 +13,7 @@ export default function BackupSettings() {
   const accounts = useStore((s) => s.accounts)
   const reseed = useStore((s) => s.reseed)
   const wipe = useStore((s) => s.wipe)
+  const askConfirm = useStore((s) => s.askConfirm)
   const fileRef = useRef<HTMLInputElement>(null)
   const [message, setMessage] = useState('')
 
@@ -29,7 +30,7 @@ export default function BackupSettings() {
   async function onRestoreFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    if (!confirm('Esto sustituirá todos los datos actuales por los del archivo. ¿Continuar?')) return
+    if (!(await askConfirm('Esto sustituirá todos los datos actuales por los del archivo. ¿Continuar?'))) return
     try {
       const text = await file.text()
       const data = JSON.parse(text)
@@ -39,6 +40,20 @@ export default function BackupSettings() {
     } catch {
       setMessage('No se ha podido leer el archivo de copia de seguridad.')
     }
+  }
+
+  async function onWipe() {
+    if (!(await askConfirm('¿Borrar TODOS los datos? Esta acción no se puede deshacer.'))) return
+    await wipe()
+    setMessage('Datos borrados.')
+    setTimeout(() => navigate('/'), 900)
+  }
+
+  async function onReseed() {
+    if (!(await askConfirm('¿Restaurar los datos de ejemplo iniciales? Se perderán los cambios actuales.'))) return
+    await reseed()
+    setMessage('Datos de ejemplo restaurados. Llevándote al inicio…')
+    setTimeout(() => navigate('/'), 900)
   }
 
   return (
@@ -74,20 +89,10 @@ export default function BackupSettings() {
         <p className="text-ink text-sm font-medium mb-1">Zona de peligro</p>
         <p className="text-ink-faint text-xs mb-3">Borra todos tus datos y empieza de cero, o restaura los datos de ejemplo iniciales.</p>
         <div className="flex gap-2">
-          <GhostButton
-            className="flex-1 text-expense"
-            onClick={() => {
-              if (confirm('¿Borrar TODOS los datos? Esta acción no se puede deshacer.')) wipe()
-            }}
-          >
+          <GhostButton className="flex-1 text-expense" onClick={onWipe}>
             Borrar todo
           </GhostButton>
-          <GhostButton
-            className="flex-1"
-            onClick={() => {
-              if (confirm('¿Restaurar los datos de ejemplo iniciales? Se perderán los cambios actuales.')) reseed()
-            }}
-          >
+          <GhostButton className="flex-1" onClick={onReseed}>
             Restaurar ejemplo
           </GhostButton>
         </div>

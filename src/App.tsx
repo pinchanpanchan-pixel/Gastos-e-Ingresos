@@ -16,6 +16,7 @@ import RecurringSettings from './screens/settings/RecurringSettings'
 import SecuritySettings from './screens/settings/SecuritySettings'
 import BackupSettings from './screens/settings/BackupSettings'
 import BudgetsSettings from './screens/settings/BudgetsSettings'
+import DialogHost from './components/DialogHost'
 
 export default function App() {
   const ready = useStore((s) => s.ready)
@@ -37,25 +38,28 @@ export default function App() {
   if (locked) return <Lock />
 
   return (
-    <HashRouter>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/movimientos" element={<Transactions />} />
-          <Route path="/add" element={<AddTransaction />} />
-          <Route path="/editar/:id" element={<AddTransaction />} />
-          <Route path="/estadisticas" element={<Stats />} />
-          <Route path="/ajustes" element={<Settings />} />
-          <Route path="/ajustes/categorias" element={<CategoriesSettings />} />
-          <Route path="/ajustes/presupuestos" element={<BudgetsSettings />} />
-          <Route path="/ajustes/cuentas" element={<AccountsSettings />} />
-          <Route path="/ajustes/deudas" element={<DebtsSettings />} />
-          <Route path="/ajustes/metas" element={<GoalsSettings />} />
-          <Route path="/ajustes/recurrentes" element={<RecurringSettings />} />
-          <Route path="/ajustes/seguridad" element={<SecuritySettings />} />
-          <Route path="/ajustes/backup" element={<BackupSettings />} />
-        </Route>
-      </Routes>
-    </HashRouter>
+    <>
+      <HashRouter>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/movimientos" element={<Transactions />} />
+            <Route path="/add" element={<AddTransaction />} />
+            <Route path="/editar/:id" element={<AddTransaction />} />
+            <Route path="/estadisticas" element={<Stats />} />
+            <Route path="/ajustes" element={<Settings />} />
+            <Route path="/ajustes/categorias" element={<CategoriesSettings />} />
+            <Route path="/ajustes/presupuestos" element={<BudgetsSettings />} />
+            <Route path="/ajustes/cuentas" element={<AccountsSettings />} />
+            <Route path="/ajustes/deudas" element={<DebtsSettings />} />
+            <Route path="/ajustes/metas" element={<GoalsSettings />} />
+            <Route path="/ajustes/recurrentes" element={<RecurringSettings />} />
+            <Route path="/ajustes/seguridad" element={<SecuritySettings />} />
+            <Route path="/ajustes/backup" element={<BackupSettings />} />
+          </Route>
+        </Routes>
+      </HashRouter>
+      <DialogHost />
+    </>
   )
 }

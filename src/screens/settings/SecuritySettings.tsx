@@ -8,6 +8,7 @@ export default function SecuritySettings() {
   const navigate = useNavigate()
   const settings = useStore((s) => s.settings)
   const updateSettings = useStore((s) => s.updateSettings)
+  const askAlert = useStore((s) => s.askAlert)
 
   const [step, setStep] = useState<'idle' | 'new1' | 'new2'>('idle')
   const [firstPin, setFirstPin] = useState('')
@@ -105,7 +106,7 @@ export default function SecuritySettings() {
                 } else {
                   const ok = await registerBiometric()
                   updateSettings({ biometricEnabled: ok })
-                  if (!ok) alert('No se ha podido registrar la biometría en este dispositivo.')
+                  if (!ok) await askAlert('No se ha podido registrar la biometría en este dispositivo.')
                 }
               }}
               className={`w-11 h-6 rounded-full relative transition ${settings.biometricEnabled ? 'bg-gold' : 'bg-surface-3'}`}

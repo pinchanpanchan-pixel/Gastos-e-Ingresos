@@ -14,6 +14,7 @@ export default function AccountsSettings() {
   const updateAccount = useStore((s) => s.updateAccount)
   const addAccount = useStore((s) => s.addAccount)
   const deleteAccount = useStore((s) => s.deleteAccount)
+  const askConfirm = useStore((s) => s.askConfirm)
 
   const [addingName, setAddingName] = useState('')
   const [showAdd, setShowAdd] = useState(false)
@@ -27,8 +28,8 @@ export default function AccountsSettings() {
 
       <div className="flex flex-col gap-3">
         {accounts.map((a) => (
-          <AccountCard key={a.id} account={a} balance={accountBalance(a.id)} onUpdate={(patch) => updateAccount(a.id, patch)} onDelete={() => {
-            if (confirm(`¿Borrar la cuenta "${a.name}"? Sus movimientos no se borrarán.`)) deleteAccount(a.id)
+          <AccountCard key={a.id} account={a} balance={accountBalance(a.id)} onUpdate={(patch) => updateAccount(a.id, patch)} onDelete={async () => {
+            if (await askConfirm(`¿Borrar la cuenta "${a.name}"? Sus movimientos no se borrarán.`)) deleteAccount(a.id)
           }} />
         ))}
       </div>

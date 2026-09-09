@@ -22,6 +22,7 @@ export default function AddTransaction() {
   const updateTransaction = useStore((s) => s.updateTransaction)
   const deleteTransaction = useStore((s) => s.deleteTransaction)
   const categorySpend = useStore((s) => s.categorySpend)
+  const askConfirm = useStore((s) => s.askConfirm)
 
   const editing = transactions.find((t) => t.id === id)
   const dupSource = duplicateFrom ? transactions.find((t) => t.id === duplicateFrom) : undefined
@@ -138,7 +139,7 @@ export default function AddTransaction() {
 
   async function onDelete() {
     if (!editing) return
-    if (!confirm('¿Seguro que quieres borrar este movimiento?')) return
+    if (!(await askConfirm('¿Seguro que quieres borrar este movimiento?'))) return
     await deleteTransaction(editing.id)
     navigate(-1)
   }

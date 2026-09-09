@@ -15,6 +15,7 @@ export default function RecurringSettings() {
   const addRecurring = useStore((s) => s.addRecurring)
   const updateRecurring = useStore((s) => s.updateRecurring)
   const deleteRecurring = useStore((s) => s.deleteRecurring)
+  const askConfirm = useStore((s) => s.askConfirm)
 
   const [showAdd, setShowAdd] = useState(false)
   const [name, setName] = useState('')
@@ -139,7 +140,12 @@ export default function RecurringSettings() {
               >
                 {r.active ? 'Activo' : 'Pausado'}
               </button>
-              <button onClick={() => confirm('¿Borrar este recurrente?') && deleteRecurring(r.id)} className="text-expense text-xs">
+              <button
+                onClick={async () => {
+                  if (await askConfirm('¿Borrar este recurrente?')) deleteRecurring(r.id)
+                }}
+                className="text-expense text-xs"
+              >
                 ✕
               </button>
             </Card>

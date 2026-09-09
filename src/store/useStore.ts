@@ -4,9 +4,21 @@ import { buildSeed } from '../lib/seed'
 import { uid, todayISO, monthKey as toMonthKey } from '../lib/utils'
 import type { Account, Category, Transaction, Debt, Goal, Recurring, Settings } from '../types'
 
+interface DialogState {
+  type: 'confirm' | 'alert' | 'prompt'
+  message: string
+  defaultValue?: string
+  resolve: (value: string | boolean | null) => void
+}
+
 interface StoreState {
   ready: boolean
   locked: boolean
+  dialog: DialogState | null
+  askConfirm: (message: string) => Promise<boolean>
+  askAlert: (message: string) => Promise<void>
+  askPrompt: (message: string, defaultValue?: string) => Promise<string | null>
+  resolveDialog: (value: string | boolean | null) => void
   accounts: Account[]
   categories: Category[]
   transactions: Transaction[]
@@ -60,6 +72,23 @@ interface StoreState {
 export const useStore = create<StoreState>((set, get) => ({
   ready: false,
   locked: false,
+  dialog: null,
+  askConfirm: (message) =>
+    new Promise((resolve) => {
+      set({ dialog: { type: 'confirm', message, resolve: (v) => resolve(v === true) } })
+    }),
+  askAlert: (message) =>
+    new Promise((resolve) => {
+      set({ dialog: { type: 'alert', message, resolve: () => resolve() } })
+    }),
+  askPrompt: (message, defaultValue) =>
+    new Promise((resolve) => {
+      set({ dialog: { type: 'prompt', message, defaultValue, resolve: (v) => resolve(typeof v === 'string' ? v : null) } })
+    }),
+  resolveDialog: (value) => {
+    get().dialog?.resolve(value)
+    set({ dialog: null })
+  },
   accounts: [],
   categories: [],
   transactions: [],
@@ -260,8 +289,25 @@ export const useStore = create<StoreState>((set, get) => ({
   },
   reseed: async () => {
     await db.clearAll()
-    set({ ready: false })
-    await get().init()
+    const seed = buildSeed()
+    await Promise.all([
+      db.putMany('accounts', seed.accounts),
+      db.putMany('categories', seed.categories),
+      db.putMany('transactions', seed.transactions),
+      db.putMany('debts', seed.debts),
+      db.putMany('goals', seed.goals),
+      db.putOne('settings', seed.settings),
+    ])
+    set({
+      accounts: seed.accounts,
+      categories: seed.categories,
+      transactions: seed.transactions,
+      debts: seed.debts,
+      goals: seed.goals,
+      recurring: seed.recurring,
+      settings: seed.settings,
+      locked: false,
+    })
   },
   wipe: async () => {
     await db.clearAll()
