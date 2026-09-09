@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Base surfaces — dark, not pure black */
+  --color-bg: #0f0f10;
+  --color-surface: #17171a;
+  --color-surface-2: #1f1f23;
+  --color-surface-3: #29292e;
+  --color-border: #2c2c31;
+
+  /* Text */
+  --color-ink: #f5f5f0;
+  --color-ink-dim: #a3a3ab;
+  --color-ink-faint: #6b6b74;
+
+  /* Gold accent */
+  --color-gold: #d4af37;
+  --color-gold-light: #f3d47a;
+  --color-gold-dark: #a8842a;
+
+  /* Semantic amounts */
+  --color-income: #4ade80;
+  --color-expense: #f87171;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+input, button, textarea, select {
+  font-family: inherit;
+}
+
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
