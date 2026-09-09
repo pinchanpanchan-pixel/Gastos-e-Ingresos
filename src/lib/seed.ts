@@ -123,7 +123,8 @@ interface HistoricalRow {
   expense: number
 }
 
-// Parsed from the user's original Google Sheet (only rows with real movements).
+// Parsed from the user's original Google Sheet (all rows with real movements,
+// from the day they started it up to the day this was imported).
 const HISTORICAL: HistoricalRow[] = [
   { date: '2026-05-11', description: 'Dinero actual', category: 'Otros', income: 482.54, expense: 0 },
   { date: '2026-05-12', description: 'Martes de tacos con Hernán', category: 'Salidas y ocio', income: 0, expense: 3.0 },
@@ -161,6 +162,44 @@ const HISTORICAL: HistoricalRow[] = [
   { date: '2026-06-30', description: 'Deudas papás', category: 'Paga', income: 107.0, expense: 0 },
   { date: '2026-07-01', description: 'Para el campamento', category: 'Otros ingresos', income: 105.0, expense: 0 },
   { date: '2026-07-08', description: 'Croissant Cafeteria', category: 'Comida y snacks', income: 0, expense: 1.8 },
+  { date: '2026-07-13', description: 'Gastos campa común', category: 'Viajes', income: 0, expense: 56.0 },
+  { date: '2026-07-14', description: 'Paga, abuelos', category: 'Paga', income: 60.5, expense: 0 },
+  { date: '2026-07-17', description: 'Helados y supermercado', category: 'Comida y snacks', income: 0, expense: 24.78 },
+  { date: '2026-07-22', description: 'Helados', category: 'Comida y snacks', income: 0, expense: 4.0 },
+  { date: '2026-07-23', description: 'Deudas papá', category: 'Paga', income: 39.0, expense: 0 },
+  { date: '2026-07-24', description: 'Helado', category: 'Comida y snacks', income: 0, expense: 5.0 },
+  { date: '2026-07-25', description: 'Libro y helado', category: 'Entretenimiento', income: 0, expense: 14.0 },
+  { date: '2026-07-26', description: 'Helado, concierto', category: 'Comida y snacks', income: 0, expense: 41.0 },
+  { date: '2026-07-27', description: 'Aguas', category: 'Comida y snacks', income: 0, expense: 1.6 },
+  { date: '2026-07-28', description: 'Chino con padrinos', category: 'Comida y snacks', income: 0, expense: 9.6 },
+  { date: '2026-07-29', description: 'Agua', category: 'Comida y snacks', income: 0, expense: 1.5 },
+  { date: '2026-07-30', description: 'La compra con papá', category: 'Comida y snacks', income: 0, expense: 9.15 },
+  { date: '2026-08-02', description: 'Carrefour, deudas Bruno, deudas mamá', category: 'Comida y snacks', income: 50.5, expense: 3.58 },
+  { date: '2026-08-04', description: 'Robado Bruno', category: 'Otros ingresos', income: 1.8, expense: 0 },
+  { date: '2026-08-05', description: 'Carrefour, Bruno', category: 'Comida y snacks', income: 0, expense: 7.09 },
+  { date: '2026-08-06', description: 'Glovo abuelos, Bicimad, Carrefour', category: 'Comida y snacks', income: 0, expense: 44.82 },
+  { date: '2026-08-07', description: 'Deudas abuelos, encontrado', category: 'Paga', income: 52.0, expense: 57.64 },
+  { date: '2026-08-08', description: 'Quintanar', category: 'Viajes', income: 0, expense: 6.2 },
+  { date: '2026-08-09', description: 'Movimiento sin detallar', category: 'Otros', income: 0, expense: 2.4 },
+  { date: '2026-08-10', description: 'Movimiento sin detallar', category: 'Otros', income: 0, expense: 1.99 },
+  { date: '2026-08-11', description: 'Wingstop, casa, abuelos', category: 'Salidas y ocio', income: 44.7, expense: 41.1 },
+  { date: '2026-08-12', description: 'Dinero Quintanar', category: 'Otros ingresos', income: 14.0, expense: 3.0 },
+  { date: '2026-08-13', description: 'Quitar mesa', category: 'Otros ingresos', income: 1.5, expense: 0 },
+  { date: '2026-08-14', description: 'Gasolinera Cabrejas', category: 'Comida y snacks', income: 0, expense: 4.98 },
+  { date: '2026-08-19', description: 'Dinero abuelos :)', category: 'Otros ingresos', income: 20.0, expense: 0 },
+  { date: '2026-08-22', description: 'Fanta', category: 'Comida y snacks', income: 0, expense: 2.4 },
+  { date: '2026-08-23', description: 'Dinero Bruno, apuestas fútbol', category: 'Otros ingresos', income: 3.0, expense: 0 },
+  { date: '2026-08-24', description: 'Deudas papá, cancha con Héctor', category: 'Otros ingresos', income: 187.0, expense: 24.28 },
+  { date: '2026-08-25', description: 'Día, Héctor Bicimad', category: 'Comida y snacks', income: 2.0, expense: 2.2 },
+  { date: '2026-08-26', description: 'Bicimad, Popeyes', category: 'Salidas y ocio', income: 0, expense: 19.0 },
+  { date: '2026-08-27', description: 'Bici', category: 'Salidas y ocio', income: 0, expense: 20.45 },
+  { date: '2026-08-28', description: 'Otros', category: 'Otros ingresos', income: 5.96, expense: 5.5 },
+  { date: '2026-09-03', description: 'iPhone 13 verde, Bruno', category: 'Compra/Venta', income: 205.0, expense: 13.05 },
+  { date: '2026-09-04', description: 'Deudas Bruno, carnicería papá', category: 'Otros ingresos', income: 11.6, expense: 3.15 },
+  { date: '2026-09-06', description: 'Bebidas', category: 'Comida y snacks', income: 0, expense: 3.6 },
+  { date: '2026-09-07', description: 'Bebida fanta', category: 'Comida y snacks', income: 0, expense: 2.6 },
+  { date: '2026-09-08', description: 'Carrefour', category: 'Otros', income: 0, expense: 2.25 },
+  { date: '2026-09-09', description: 'Deudas', category: 'Paga', income: 30.0, expense: 0 },
 ]
 
 export function buildHistoricalTransactions(categories: Category[], accounts: Account[]): Transaction[] {
