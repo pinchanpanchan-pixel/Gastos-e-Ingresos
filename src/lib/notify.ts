@@ -9,7 +9,7 @@ export async function ensureNotificationPermission(): Promise<boolean> {
 export function notify(title: string, body: string) {
   if (!('Notification' in window) || Notification.permission !== 'granted') return
   try {
-    new Notification(title, { body, icon: '/icons/icon-192.png' })
+    new Notification(title, { body, icon: `${import.meta.env.BASE_URL}icons/icon-192.png` })
   } catch {
     // Notifications can fail silently in unsupported contexts (e.g. some mobile browsers).
   }
